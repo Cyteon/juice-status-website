@@ -48,7 +48,7 @@ export default function Add() {
             "Sending request with this code:",
             new URLSearchParams(window.location.search).get("code"),
           );
-          fetch("https://juiceapi.spectralo.hackclub.app", {
+          fetch("https://juicestats.spectralo.hackclub.app/api/add", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -57,7 +57,7 @@ export default function Add() {
             }),
           }).then(() => {
             setConfettiFired(false);
-            router.push("/success");
+            router.push("/");
           });
         }, 1000);
         return () => {
