@@ -1,22 +1,23 @@
+
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-
+} from
+ "@/components/ui/card";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="max-h-full min-h-screen">
-      <div className="flex flex-col items-center dark ml-96 mr-96 p-20">
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-8">
+    <div className="flex flex-col max-h-full min-h-screen w-full justify-between items-center">
+      <div className="flex flex-col items-center p-10 w-full max-w-2xl">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-8 mt-16">
           Juice Slack Status
         </h1>
-        <Card className="align-middle m-4 justify-center w-1/2">
+        <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>Add yourself :3</CardTitle>
             <CardDescription>
@@ -24,10 +25,14 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button>Authorize</Button>
+            <Button asChild>
+              <Link href="https://slack.com/oauth/v2/authorize?scope=&amp;user_scope=users.profile%3Awrite&amp;redirect_uri=https%3A%2F%2Fjuicestats.spectralo.hackclub.app%2Fad&amp;client_id=2210535565.8399992850705">
+                Login
+              </Link>
+            </Button>
           </CardContent>
         </Card>
-        <Card className="align-middle m-4 justify-center w-1/2">
+        <Card className="w-full max-w-md mt-4">
           <CardHeader>
             <CardTitle>Remove yourself :/</CardTitle>
             <CardDescription>
@@ -35,12 +40,14 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button>Remove me</Button>
+            <Button asChild>
+              <Link href="https://slack.com/oauth/v2/authorize?scope=&amp;user_scope=users.profile%3Awrite&amp;redirect_uri=https%3A%2F%2Fjuicestats.spectralo.hackclub.app%2Fad&amp;client_id=2210535565.8399992850705">Remove me</Link>
+            </Button>
           </CardContent>
         </Card>
       </div>
-      <div className="flex flex-col pr-6 pl-6 pb-4 align-bottom justify-end mt-2">
-        <p>Made by spc :3</p>
+      <div className="p-4 w-full text-start ">
+        <p className="font-bold">Made by spc :3</p>
       </div>
     </div>
   );
