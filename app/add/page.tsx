@@ -16,14 +16,6 @@ import {
 import Link from "next/link";
 import { Suspense } from "react";
 import { Input } from "@/components/ui/input";
-import Axios from "axios";
-import { useSearchParams } from "next/navigation";
-
-function Search() {
-  const searchParams = useSearchParams();
-  const query = searchParams.get("query") || "";
-  return <input placeholder="Search..." value={query} readOnly />;
-}
 
 export default function Add() {
   const [progress, setProgress] = React.useState(0);
@@ -52,9 +44,17 @@ export default function Add() {
       if (progress === 100) {
         const timeout = setTimeout(() => {
           setConfetti(false);
-          Axios.post("https://juiceapi.spectralo.hackclub.app", {
-            code: new URLSearchParams(window.location.search).get("code"),
-            juice: juiceToken,
+          console.log(
+            "Sending request with this code:",
+            new URLSearchParams(window.location.search).get("code"),
+          );
+          fetch("https://juiceapi.spectralo.hackclub.app", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              code: new URLSearchParams(window.location.search).get("code"),
+              juice: juiceToken,
+            }),
           }).then(() => {
             setConfettiFired(false);
             router.push("/success");
@@ -71,7 +71,6 @@ export default function Add() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <Search />
       <div className="w-full h-screen flex flex-col items-center justify-center">
         <AlertDialog open={dialogOpen}>
           <AlertDialogContent>
