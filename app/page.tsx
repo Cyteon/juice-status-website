@@ -1,12 +1,10 @@
-
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from
- "@/components/ui/card";
+} from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -26,7 +24,7 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <Button asChild>
-              <Link href="https://slack.com/oauth/v2/authorize?scope=&amp;user_scope=users.profile%3Awrite&amp;redirect_uri=https%3A%2F%2Fjuicestats.spectralo.hackclub.app%2Fad&amp;client_id=2210535565.8399992850705">
+              <Link href="https://slack.com/oauth/v2/authorize?scope=&amp;user_scope=users.profile%3Awrite&amp;redirect_uri=https%3A%2F%2Fjuicestats.spectralo.hackclub.app%2Fadd&amp;client_id=2210535565.8399992850705">
                 Login
               </Link>
             </Button>
@@ -41,7 +39,9 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <Button asChild>
-              <Link href="https://slack.com/oauth/v2/authorize?scope=&amp;user_scope=users.profile%3Awrite&amp;redirect_uri=https%3A%2F%2Fjuicestats.spectralo.hackclub.app%2Fad&amp;client_id=2210535565.8399992850705">Remove me</Link>
+              <Link href="https://slack.com/oauth/v2/authorize?scope=&amp;user_scope=users.profile%3Awrite&amp;redirect_uri=https%3A%2F%2Fjuicestats.spectralo.hackclub.app%2Fremove&amp;client_id=2210535565.8399992850705">
+                Remove me
+              </Link>
             </Button>
           </CardContent>
         </Card>
