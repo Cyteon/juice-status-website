@@ -19,7 +19,7 @@ export default function Home() {
           <CardHeader>
             <CardTitle>Add yourself :3</CardTitle>
             <CardDescription>
-              Just authorize the app and you'll be good to go!
+              Just authorize the app and youll be good to go!
             </CardDescription>
           </CardHeader>
           <CardContent>

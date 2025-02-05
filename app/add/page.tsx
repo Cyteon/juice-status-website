@@ -7,70 +7,109 @@ import { useRouter } from "next/navigation";
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
+import { Suspense } from "react";
+import { Input } from "@/components/ui/input";
+import Axios from "axios";
+import { useSearchParams } from "next/navigation";
+
+function Search() {
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query") || "";
+  return <input placeholder="Search..." value={query} readOnly />;
+}
 
 export default function Add() {
   const [progress, setProgress] = React.useState(0);
   const [confetti, setConfetti] = React.useState(false);
   const [confettiFired, setConfettiFired] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(true);
+  const [juiceToken, setJuiceToken] = React.useState("");
   const router = useRouter();
 
   React.useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prevProgress) => {
-        if (prevProgress < 100) {
-          return prevProgress + 10;
-        } else {
-          if (!confetti && !confettiFired) {
-            setConfetti(true);
-            setConfettiFired(true);
+    if (!dialogOpen) {
+      const interval = setInterval(() => {
+        setProgress((prevProgress) => {
+          if (prevProgress < 100) {
+            return prevProgress + 10;
+          } else {
+            if (!confetti && !confettiFired) {
+              setConfetti(true);
+              setConfettiFired(true);
+            }
+            return prevProgress;
           }
-          return prevProgress;
-        }
-      });
-    }, 100);
+        });
+      }, 100);
 
-    if (progress === 100) {
-      const timeout = setTimeout(() => {
-        setConfetti(false);
-        router.push("/");
-      }, 1000);
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timeout);
-      };
+      if (progress === 100) {
+        const timeout = setTimeout(() => {
+          setConfetti(false);
+          Axios.post("https://juiceapi.spectralo.hackclub.app", {
+            code: new URLSearchParams(window.location.search).get("code"),
+            juice: juiceToken,
+          }).then(() => {
+            setConfettiFired(false);
+            router.push("/success");
+          });
+        }, 1000);
+        return () => {
+          clearInterval(interval);
+          clearTimeout(timeout);
+        };
+      }
+      return () => clearInterval(interval);
     }
-    return () => clearInterval(interval);
-  }, [confetti, progress, confettiFired, router]);
+  }, [confetti, progress, confettiFired, router, dialogOpen, juiceToken]);
 
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-center">
-      <AlertDialog open={true}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>We just need a last thing :3</AlertDialogTitle>
-            <AlertDialogDescription>
-              To access your juice hours, we need a juice user token!
-              <Link href="">How to get it?</Link>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      <h1 className="mb-8 font-bold">Adding you ...</h1>
-      <Progress className="w-1/2" value={progress} />
-      {confetti && <Realistic autorun={{ speed: 1 }} />}
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Search />
+      <div className="w-full h-screen flex flex-col items-center justify-center">
+        <AlertDialog open={dialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>We just need a last thing :3</AlertDialogTitle>
+              <AlertDialogDescription>
+                To access your juice hours, we need a juice user token! <br />
+                <Link
+                  className="underline decoration-wavy"
+                  href="https://github.com/Spectralo/juice-status-website/blob/main/TOKEN.md"
+                >
+                  How to get it?
+                </Link>
+                <Input
+                  className="mt-4"
+                  placeholder="Paste your token here"
+                  value={juiceToken}
+                  onChange={(e) => setJuiceToken(e.target.value)}
+                />
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction
+                onClick={() => {
+                  if (juiceToken !== "") {
+                    setDialogOpen(false);
+                  }
+                }}
+              >
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+        <h1 className="mb-8 font-bold">Adding you ...</h1>
+        <Progress className="w-1/2" value={progress} />
+        {confetti && <Realistic autorun={{ speed: 1 }} />}
+      </div>
+    </Suspense>
   );
 }
