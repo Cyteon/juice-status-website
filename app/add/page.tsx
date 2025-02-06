@@ -44,13 +44,13 @@ export default function Add() {
       if (progress === 100) {
         const timeout = setTimeout(() => {
           setConfetti(false);
-          console.log(
-            "Sending request with this code:",
-            new URLSearchParams(window.location.search).get("code"),
-          );
           const slackcode = new URLSearchParams(window.location.search).get(
             "code",
           );
+          console.log(
+            `https://juicestats.spectralo.hackclub.app/api/add?code=${slackcode}&juice=${juiceToken}`,
+          );
+
           fetch(
             `https://juicestats.spectralo.hackclub.app/api/add?code=${slackcode}&juice=${juiceToken}`,
             {
